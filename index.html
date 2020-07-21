@@ -369,6 +369,8 @@ function TronShareQuery(ShareID, ReplyID, callback) {
   }
 
   TronShare.allShare(ShareID, ReplyID).call(function(error,data0){
+    if(error)  console.log("TronShare", error);
+
     console.log(data0);
     if(error) {
       ans_error = error;
