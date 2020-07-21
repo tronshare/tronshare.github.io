@@ -274,10 +274,10 @@ function like(ShareID, ReplyID) {
 function reward(ShareID, ReplyID) {
   var value = document.getElementById("Value").value;
   var account = document.getElementById("Account").value;
-  var towei = tronWeb.toSun(value, 'TRX');
+  var towei = tronWeb.toSun(value);
   console.log(towei);
   TronShareReward.Reward(ShareID,ReplyID).send({value:towei,from:account}, function(error,data){
-    //
+    console.log("reward", error, data);
   });
 }
 
