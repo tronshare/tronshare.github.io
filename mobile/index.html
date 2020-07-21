@@ -319,7 +319,7 @@ function readShare(ShareID, ReplyID,  length) {
 
       if (ReplyID==0) {
         pushBoxes();
-        document.getElementById('container').innerHTML += Share2html(ShareID, oneQuery);
+        document.getElementById('ShareContainer').innerHTML += Share2html(ShareID, oneQuery);
         pullBoxes();
       }
       else{
