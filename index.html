@@ -369,7 +369,8 @@ function TronShareQuery(ShareID, ReplyID, callback) {
   }
 
   TronShare.allShare(ShareID, ReplyID).call(function(error,data0){
-    if(error)  console.log("TronShare", error);
+    if(error)  console.log("TronShare err", error);
+    else console.log("TronShare get", data0);
 
     console.log(data0);
     if(error) {
@@ -381,14 +382,15 @@ function TronShareQuery(ShareID, ReplyID, callback) {
   });  
   
   TronShareLike.allLike(ShareID, ReplyID).call(function(error,data1){
-    if(error)  console.log("TronShareLike", error);
-    console.log("data1",data1);
+    if(error)  console.log("TronShareLike err", error);
+    else console.log("TronShareLike get", data1);
     ans_data.like = parseInt(data1._hex);
     checkFinish();
   });  
   
   TronShareReward.getSum(ShareID, ReplyID).call(function(error,data2){
-    if(error)  console.log("TronShareReward", error);
+    if(error)  console.log("TronShareReward err", error);
+    else console.log("TronShareReward get", data2);
     console.log("data2",data2);
     ans_data.reward = parseInt(data2._hex);
     checkFinish();
