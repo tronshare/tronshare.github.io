@@ -374,7 +374,6 @@ function TronShareQuery(ShareID, ReplyID, callback) {
     else console.log("TronShare get", data0);
     if(error) {
       ans_error = error;
-      return;
     }
     ans_data.AllowUpdated = data0.AllowUpdated;
     ans_data.content = data0.content;
