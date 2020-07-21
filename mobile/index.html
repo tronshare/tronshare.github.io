@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
     <title>TronShare</title>
     <link rel="stylesheet" href="./weui.min.css">
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.2.0/dist/web3.min.js"></script>
+    <script type="text/javascript" src="../tronweb.js"></script>
 
 
     <style>
@@ -72,37 +72,11 @@
 
 <script>
 
-var EtherShare;
-var accountBeforeLoading;
+var TronShare;
 
 function getAccount() {
-  if (window.ethereum) {
-    ethereum.enable()
-    .then(function (accounts) {
-      document.getElementById('Account').innerHTML = acc2html(accounts);
-    })
-    .catch(function (reason) {
-      console.log(reason);
-      alert("without permission to send transaction to Ethereum");
-    })
-  }
-  else {
-    web3.eth.getAccounts(function (err, data){
-      document.getElementById('Account').innerHTML = acc2html(data);
-    });    
-  }
-}
-
-function getAccountBeforeLoading() {
-  web3.eth.getAccounts(function (err, data){
-    if(err) {
-      console.log("cannot get account before loading");
-    }
-    else {
-      accountBeforeLoading = data;
-      console.log("accountBeforeLoading", accountBeforeLoading);
-    }
-  });    
+  data = [tronWeb.defaultAddress.base58];
+  document.getElementById('Account').innerHTML = acc2html(data);
 }
 
 
@@ -217,18 +191,18 @@ function pullBoxes() {
 
 function reply(ShareID){
   var nickname = document.getElementById("Nickname").value;
-  var AllowUpdated = document.getElementById("switchCP").checked;
+  var AllowUpdated = document.getElementById("AllowUpdated").checked;
   var content = document.getElementById("Content").value;
   var account = document.getElementById("Account").value;
   console.log(nickname, AllowUpdated, content, {from:account});
-  EtherShare.methods.ReplyShare(ShareID, nickname, AllowUpdated, content).send({from:account}, function(error,data){
+  TronShare.ReplyShare(ShareID, nickname, AllowUpdated, content).send({from:account}, function(error,data){
     //
   });
 }
 
 function like(ShareID, ReplyID) {
   var account = document.getElementById("Account").value;
-  EtherShareLike.methods.like(ShareID,ReplyID).send({from:account}, function(error,data){
+  TronShareLike.like(ShareID,ReplyID).send({}, function(error,data){
     //
   });
 }
@@ -236,10 +210,10 @@ function like(ShareID, ReplyID) {
 function reward(ShareID, ReplyID) {
   var value = document.getElementById("Value").value;
   var account = document.getElementById("Account").value;
-  var towei = web3.utils.toWei(value, 'ether');
-  console.log(towei);
-  EtherShareReward.methods.Reward(ShareID,ReplyID).send({value:towei,from:account}, function(error,data){
-    //
+  var tosun = tronWeb.toSun(value);
+  console.log(tosun);
+  TronShareReward.Reward(ShareID,ReplyID).send({callValue:tosun}, function(error,data){
+    console.log("reward", error, data);
   });
 }
 
@@ -247,7 +221,7 @@ function update(ShareID, ReplyID){
   var content = document.getElementById("Content").value;
   var account = document.getElementById("Account").value;
   console.log(ShareID, ReplyID, content, {from:account});
-  EtherShare.methods.Update(ShareID, ReplyID, content).send({from:account}, function(error,data){
+  TronShare.Update(ShareID, ReplyID, content).send({}, function(error,data){
     //
   });
 }
@@ -268,12 +242,12 @@ function timestampToTime(timestamp) {
 }
 
 function Share2html(ShareID, oneQuery) {
-  var str = '<div class="weui-panel"><div class="weui-panel__bd" id="ReplyOf'+ShareID+'"><div class="weui-media-box weui-media-box_text"><p><h3 class="weui-media-box__title inline">'+oneQuery.nickname+'</h3></p><p class="weui-media-box__desc dark font16">'+timestampToTime(oneQuery.timestamp)+'<br>'+oneQuery.content.replace(/\n/g, '<br>')+'</p><ul class="weui-media-box__info font16"><li class="weui-media-box__info__meta gray" onclick="clickForward('+ShareID+','+0+')" ><u>Forward</u></li><li class="weui-media-box__info__meta gray" onclick="clickReply('+ShareID+')"><u>Reply</u></li><li class="weui-media-box__info__meta gray" onclick="clickLike('+ShareID+','+0+')"><u>Like: '+oneQuery.like+'</u></li><li class="weui-media-box__info__meta gray" onclick="clickReward('+ShareID+','+0+')"><u>Reward: '+web3.utils.fromWei(oneQuery.reward,"ether")+' ETH</u></li></ul><div id="ActionTo'+ShareID+'-0"></div></div></div></div>';
+  var str = '<div class="weui-panel"><div class="weui-panel__bd" id="ReplyOf'+ShareID+'"><div class="weui-media-box weui-media-box_text"><p><h3 class="weui-media-box__title inline">'+oneQuery.nickname+'</h3></p><p class="weui-media-box__desc dark font16">'+timestampToTime(oneQuery.timestamp)+'<br>'+oneQuery.content.replace(/\n/g, '<br>')+'</p><ul class="weui-media-box__info font16"><li class="weui-media-box__info__meta gray" onclick="clickForward('+ShareID+','+0+')" ><u>Forward</u></li><li class="weui-media-box__info__meta gray" onclick="clickReply('+ShareID+')"><u>Reply</u></li><li class="weui-media-box__info__meta gray" onclick="clickLike('+ShareID+','+0+')"><u>Like: '+oneQuery.like+'</u></li><li class="weui-media-box__info__meta gray" onclick="clickReward('+ShareID+','+0+')"><u>Reward: '+tronWeb.fromSun(oneQuery.reward)+' TRX</u></li></ul><div id="ActionTo'+ShareID+'-0"></div></div></div></div>';
 
   return str;
 }
 function Reply2html(ShareID, ReplyID, oneQuery) {
-  var str = '<div class="weui-media-box weui-media-box_text"><p><h3 class="weui-media-box__title inline">#'+ReplyID+"&nbsp;"+oneQuery.nickname+'</h3></p><p class="weui-media-box__desc dark font16">'+timestampToTime(oneQuery.timestamp)+'<br>'+oneQuery.content.replace(/\n/g, '<br>')+'</p><ul class="weui-media-box__info font16"><li class="weui-media-box__info__meta gray" onclick="clickForward('+ShareID+','+ReplyID+')" ><u>Forward</u></li><li class="weui-media-box__info__meta gray" onclick="clickLike('+ShareID+','+ReplyID+')"><u>Like: '+oneQuery.like+'</u></li><li class="weui-media-box__info__meta gray" onclick="clickReward('+ShareID+','+ReplyID+')"><u>Reward: '+web3.utils.fromWei(oneQuery.reward,"ether")+' ETH</u></li></ul><div id="ActionTo'+ShareID+'-'+ReplyID+'"></div></div>';
+  var str = '<div class="weui-media-box weui-media-box_text"><p><h3 class="weui-media-box__title inline">#'+ReplyID+"&nbsp;"+oneQuery.nickname+'</h3></p><p class="weui-media-box__desc dark font16">'+timestampToTime(oneQuery.timestamp)+'<br>'+oneQuery.content.replace(/\n/g, '<br>')+'</p><ul class="weui-media-box__info font16"><li class="weui-media-box__info__meta gray" onclick="clickForward('+ShareID+','+ReplyID+')" ><u>Forward</u></li><li class="weui-media-box__info__meta gray" onclick="clickLike('+ShareID+','+ReplyID+')"><u>Like: '+oneQuery.like+'</u></li><li class="weui-media-box__info__meta gray" onclick="clickReward('+ShareID+','+ReplyID+')"><u>Reward: '+tronWeb.fromSun(oneQuery.reward)+' TRX</u></li></ul><div id="ActionTo'+ShareID+'-'+ReplyID+'"></div></div>';
 /*
   if(oneQuery.AllowUpdated && accountBeforeLoading.indexOf(oneQuery.sender)>=0) {
     str +=  '<div onclick="clickUpdate('+ShareID+','+ReplyID+')" class="action">Update</div>';
@@ -281,9 +255,57 @@ function Reply2html(ShareID, ReplyID, oneQuery) {
   return str;
 }
 
+function TronShareQuery(ShareID, ReplyID, callback) {
+  console.log("TronShareQuery", ShareID, ReplyID);
+  var ans_error;
+  var ans_data = {};
+  var getting = 3;
+
+  function checkFinish() {
+    getting--;
+    if (getting==0 && ans_error==null)
+      callback(ans_error, ans_data);
+  }
+
+  TronShare.allShare(ShareID, ReplyID).call(function(error,data0){
+    if(error)  console.log("TronShare err", error);
+    else console.log("TronShare get", data0);
+    if(error) {
+      ans_error = error;
+      return callback(ans_error, ans_data);
+    }
+    ans_data.AllowUpdated = data0.AllowUpdated;
+    ans_data.content = data0.content;
+    ans_data.nickname = data0.nickname;
+    ans_data.sender = data0.sender;
+    ans_data.timestamp = parseInt(data0.timestamp._hex);
+
+
+    checkFinish()
+  });  
+  
+  TronShareLike.allLike(ShareID, ReplyID).call(function(error,data1){
+    if(error)  console.log("TronShareLike err", error);
+    else console.log("TronShareLike get", data1);
+
+    ans_data.like = parseInt(data1._hex);
+    checkFinish();
+  });  
+  
+  TronShareReward.getSum(ShareID, ReplyID).call(function(error,data2){
+    if(error)  console.log("TronShareReward err", error);
+    else console.log("TronShareReward get", data2);
+  
+    ans_data.reward = parseInt(data2._hex);
+    checkFinish();
+  });  
+  
+}
+
 function readShare(ShareID, ReplyID,  length) {
 
-  EtherShareQuery.methods.get(ShareID,ReplyID).call(function(error,data){
+  TronShareQuery(ShareID,ReplyID, function(error,data){
+    console.log("callback", error, data);
     if (error) {
       console.log("no reply, next share");
       //no reply, next share
@@ -297,7 +319,7 @@ function readShare(ShareID, ReplyID,  length) {
 
       if (ReplyID==0) {
         pushBoxes();
-        document.getElementById('ShareContainer').innerHTML += Share2html(ShareID, oneQuery);
+        document.getElementById('container').innerHTML += Share2html(ShareID, oneQuery);
         pullBoxes();
       }
       else{
@@ -306,70 +328,44 @@ function readShare(ShareID, ReplyID,  length) {
         pullBoxes();
       }
 
-      if (toastStatus=="connect") {
-        removeToast();
-      }
-
       readShare(ShareID, ReplyID+1, length);
     }
   });
 }
 
-function getQuery() {
-  var query = window.location.search.substring(1);
-  var vars = query.split("&");
-  var res ={};
-  for (var i=0;i<vars.length;i++) {
-    var pair = vars[i].split("=");
-    res[pair[0]] = pair[1];
-  }
-  return res;
-}
-
 function startApp(){
-  getAccountBeforeLoading();
 
-  EtherShare = new web3.eth.Contract([{"constant":true,"inputs":[],"name":"count","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"ShareID","type":"uint256"},{"name":"ReplyID","type":"uint256"},{"name":"content","type":"string"}],"name":"Update","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"ShareID","type":"uint256"},{"name":"nickname","type":"string"},{"name":"AllowUpdated","type":"bool"},{"name":"content","type":"string"}],"name":"ReplyShare","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"},{"name":"","type":"uint256"}],"name":"allShare","outputs":[{"name":"sender","type":"address"},{"name":"nickname","type":"string"},{"name":"timestamp","type":"uint256"},{"name":"AllowUpdated","type":"bool"},{"name":"content","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"link","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"nickname","type":"string"},{"name":"AllowUpdated","type":"bool"},{"name":"content","type":"string"}],"name":"NewShare","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"name":"ShareID","type":"uint256"},{"indexed":false,"name":"ReplyID","type":"uint256"}],"name":"EVENT","type":"event"}],"0xc86bdf9661c62646194ef29b1b8f5fe226e8c97e");
+  TronShare = tronWeb.contract([{"constant":true,"inputs":[],"name":"count","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"ShareID","type":"uint256"},{"name":"ReplyID","type":"uint256"},{"name":"content","type":"string"}],"name":"Update","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"ShareID","type":"uint256"},{"name":"nickname","type":"string"},{"name":"AllowUpdated","type":"bool"},{"name":"content","type":"string"}],"name":"ReplyShare","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"},{"name":"","type":"uint256"}],"name":"allShare","outputs":[{"name":"sender","type":"address"},{"name":"nickname","type":"string"},{"name":"timestamp","type":"uint256"},{"name":"AllowUpdated","type":"bool"},{"name":"content","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"link","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"nickname","type":"string"},{"name":"AllowUpdated","type":"bool"},{"name":"content","type":"string"}],"name":"NewShare","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"name":"ShareID","type":"uint256"},{"indexed":false,"name":"ReplyID","type":"uint256"}],"name":"EVENT","type":"event"}],"TEEygVmUUsr2cpnPZTuq8kqq7wvuBqJDya");
 
-  EtherShareLike = new web3.eth.Contract([{"constant":true,"inputs":[],"name":"link","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"ShareID","type":"uint256"},{"name":"ReplyID","type":"uint256"}],"name":"like","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"},{"name":"","type":"uint256"}],"name":"allLike","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"}],"0x43820f75f021c34ce13ded1595633ed39b79ab47");
+  TronShareLike = tronWeb.contract([{"constant":true,"inputs":[],"name":"link","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"ShareID","type":"uint256"},{"name":"ReplyID","type":"uint256"}],"name":"like","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"},{"name":"","type":"uint256"}],"name":"allLike","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"}],"TXTG5cETDFVt1k4TgZa1eaEc6rM8NyhPZG");
 
-  EtherShareReward = new web3.eth.Contract([{"constant":false,"inputs":[{"name":"ShareID","type":"uint256"},{"name":"ReplyID","type":"uint256"}],"name":"Reward","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"},{"name":"","type":"uint256"},{"name":"","type":"uint256"}],"name":"allRewards","outputs":[{"name":"from","type":"address"},{"name":"value","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"ShareID","type":"uint256"},{"name":"ReplyID","type":"uint256"}],"name":"getSum","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"}],"0x28daa51dc3d80a951af9c451d174f0c7156c6876");
+  TronShareReward = tronWeb.contract([{"constant":false,"inputs":[{"name":"ShareID","type":"uint256"},{"name":"ReplyID","type":"uint256"}],"name":"Reward","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"},{"name":"","type":"uint256"},{"name":"","type":"uint256"}],"name":"allRewards","outputs":[{"name":"from","type":"address"},{"name":"value","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"ShareID","type":"uint256"},{"name":"ReplyID","type":"uint256"}],"name":"getSum","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"}],"TToZYfsJK8FmN9ZkbafECGjBnD9hK1EDnG");
 
-  EtherShareQuery = new web3.eth.Contract([{"constant": true,"inputs": [{"internalType": "uint256","name": "ShareID","type": "uint256"},{"internalType": "uint256","name": "ReplyID","type": "uint256"}],"name": "get","outputs": [{"components": [{"internalType": "address","name": "sender","type": "address"},{"internalType": "string","name": "nickname","type": "string"},{"internalType": "uint256","name": "timestamp","type": "uint256"},{"internalType": "bool","name": "AllowUpdated","type": "bool"},{"internalType": "string","name": "content","type": "string"},{"internalType": "uint256","name": "like","type": "uint256"},{"internalType": "uint256","name": "reward","type": "uint256"}],"internalType": "struct EtherShareQuery.oneQuery","name": "","type": "tuple"}],"payable": false,"stateMutability": "view","type": "function"}], "0x71de0d9fea931b42297d94cac5ec915410e1da99");
-
-  var queryShareID = getQuery()["id"];
-  if(queryShareID) {
-    var ShareID = parseInt(queryShareID);
-    readShare(ShareID,0,0);
-  }
-  else {
-    console.log("calling count");
-    EtherShare.methods.count().call(function(error,data){
-      cnt = data;
+  console.log("calling count");
+  TronShare.count().call(function(error,data){
+      if(error) {
+        console.log("err!", error);
+        return startApp();
+      }
+      cnt = parseInt(data._hex, 16);
       console.log(cnt);
       readShare(cnt-1,0,cnt);
     });
-  }
 }
 
 window.addEventListener('load', function() {
 
   // Modern dapp browsers...
-  if (window.ethereum) {
-    window.web3 = new Web3(ethereum);
-    addToast("Connecting", "connect");
-    startApp();
-  }
-  // Legacy dapp browsers...
-  else if (window.web3) {
-    window.web3 = new Web3(web3.currentProvider);
+  if (window.tronWeb) {
     addToast("Connecting", "connect");
     startApp();
   }
   // Non-dapp browsers...
   else {
     addToast("Using TronGrid", "connect");
-    window.web3 = new Web3(new Web3.providers.HttpProvider("https://mainnet.infura.io/v3/bf14a42f4ce744afb9c2eec7ba215b01"));
+    tronWeb = new TronWeb({
+        fullHost: 'https://api.trongrid.io'
+    });
     startApp();
   }
 })
