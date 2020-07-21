@@ -167,18 +167,6 @@ function getAccount() {
   }
 }
 
-function getAccountBeforeLoading() {
-  tronWeb.getAccounts(function (err, data){
-    if(err) {
-      console.log("cannot get account before loading");
-    }
-    else {
-      accountBeforeLoading = data;
-      console.log("accountBeforeLoading", accountBeforeLoading);
-    }
-  });    
-}
-
 
 function clickReply(ShareID) {
   if(openaction.length!=0 && ShareID==openaction[0] && openaction[2]=="reply")
@@ -402,13 +390,11 @@ function readShare(ShareID, ReplyID,  length) {
 function startApp(){
   getAccountBeforeLoading();
 
-  TronShare = new tronWeb.contract([{"constant":true,"inputs":[],"name":"count","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"ShareID","type":"uint256"},{"name":"ReplyID","type":"uint256"},{"name":"content","type":"string"}],"name":"Update","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"ShareID","type":"uint256"},{"name":"nickname","type":"string"},{"name":"AllowUpdated","type":"bool"},{"name":"content","type":"string"}],"name":"ReplyShare","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"},{"name":"","type":"uint256"}],"name":"allShare","outputs":[{"name":"sender","type":"address"},{"name":"nickname","type":"string"},{"name":"timestamp","type":"uint256"},{"name":"AllowUpdated","type":"bool"},{"name":"content","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"link","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"nickname","type":"string"},{"name":"AllowUpdated","type":"bool"},{"name":"content","type":"string"}],"name":"NewShare","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"name":"ShareID","type":"uint256"},{"indexed":false,"name":"ReplyID","type":"uint256"}],"name":"EVENT","type":"event"}],"TEEygVmUUsr2cpnPZTuq8kqq7wvuBqJDya");
+  TronShare = tronWeb.contract([{"constant":true,"inputs":[],"name":"count","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"ShareID","type":"uint256"},{"name":"ReplyID","type":"uint256"},{"name":"content","type":"string"}],"name":"Update","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"ShareID","type":"uint256"},{"name":"nickname","type":"string"},{"name":"AllowUpdated","type":"bool"},{"name":"content","type":"string"}],"name":"ReplyShare","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"},{"name":"","type":"uint256"}],"name":"allShare","outputs":[{"name":"sender","type":"address"},{"name":"nickname","type":"string"},{"name":"timestamp","type":"uint256"},{"name":"AllowUpdated","type":"bool"},{"name":"content","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"link","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"nickname","type":"string"},{"name":"AllowUpdated","type":"bool"},{"name":"content","type":"string"}],"name":"NewShare","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"name":"ShareID","type":"uint256"},{"indexed":false,"name":"ReplyID","type":"uint256"}],"name":"EVENT","type":"event"}],"TEEygVmUUsr2cpnPZTuq8kqq7wvuBqJDya");
 
-  TronShareLike = new tronWeb.contract([{"constant":true,"inputs":[],"name":"link","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"ShareID","type":"uint256"},{"name":"ReplyID","type":"uint256"}],"name":"like","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"},{"name":"","type":"uint256"}],"name":"allLike","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"}],"TXTG5cETDFVt1k4TgZa1eaEc6rM8NyhPZG");
+  TronShareLike = tronWeb.contract([{"constant":true,"inputs":[],"name":"link","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"ShareID","type":"uint256"},{"name":"ReplyID","type":"uint256"}],"name":"like","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"},{"name":"","type":"uint256"}],"name":"allLike","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"}],"TXTG5cETDFVt1k4TgZa1eaEc6rM8NyhPZG");
 
-  TronShareReward = new tronWeb.contract([{"constant":false,"inputs":[{"name":"ShareID","type":"uint256"},{"name":"ReplyID","type":"uint256"}],"name":"Reward","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"},{"name":"","type":"uint256"},{"name":"","type":"uint256"}],"name":"allRewards","outputs":[{"name":"from","type":"address"},{"name":"value","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"ShareID","type":"uint256"},{"name":"ReplyID","type":"uint256"}],"name":"getSum","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"}],"TToZYfsJK8FmN9ZkbafECGjBnD9hK1EDnG");
-
-  TronShareQuery = new tronWeb.contract([{"constant": true,"inputs": [{"internalType": "uint256","name": "ShareID","type": "uint256"},{"internalType": "uint256","name": "ReplyID","type": "uint256"}],"name": "get","outputs": [{"components": [{"internalType": "address","name": "sender","type": "address"},{"internalType": "string","name": "nickname","type": "string"},{"internalType": "uint256","name": "timestamp","type": "uint256"},{"internalType": "bool","name": "AllowUpdated","type": "bool"},{"internalType": "string","name": "content","type": "string"},{"internalType": "uint256","name": "like","type": "uint256"},{"internalType": "uint256","name": "reward","type": "uint256"}],"internalType": "struct TronShareQuery.oneQuery","name": "","type": "tuple"}],"payable": false,"stateMutability": "view","type": "function"}], "TAL4oZbcijTo8W2NvPxBTmzZrpu48E3AwW");
+  TronShareReward = tronWeb.contract([{"constant":false,"inputs":[{"name":"ShareID","type":"uint256"},{"name":"ReplyID","type":"uint256"}],"name":"Reward","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"},{"name":"","type":"uint256"},{"name":"","type":"uint256"}],"name":"allRewards","outputs":[{"name":"from","type":"address"},{"name":"value","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"ShareID","type":"uint256"},{"name":"ReplyID","type":"uint256"}],"name":"getSum","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"}],"TToZYfsJK8FmN9ZkbafECGjBnD9hK1EDnG");
 
   console.log("calling count");
   TronShare.methods.count().call(function(error,data){
@@ -421,15 +407,7 @@ function startApp(){
 window.addEventListener('load', function() {
 
   // Modern dapp browsers...
-  if (window.ethereum) {
-    window.web3 = new Web3(ethereum);
-    console.log("Modern");
-    startApp();
-  }
-  // Legacy dapp browsers...
-  else if (window.web3) {
-    window.web3 = new Web3(web3.currentProvider);
-    console.log("Legacy");
+  if (window.tronWeb) {
     startApp();
   }
   // Non-dapp browsers...
