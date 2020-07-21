@@ -169,6 +169,7 @@ function acc2html(data) {
 
 function getAccount() {
   data = [tronWeb.defaultAddress.base58];
+  console.log("!!!!!!!!!!!!",data);
   document.getElementById('Account').innerHTML = acc2html(data);
 }
 
