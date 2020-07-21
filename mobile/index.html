@@ -328,6 +328,9 @@ function readShare(ShareID, ReplyID,  length) {
         pullBoxes();
       }
 
+      if (toastStatus=="connect") {
+        removeToast();
+      }
       readShare(ShareID, ReplyID+1, length);
     }
   });
