@@ -379,12 +379,14 @@ function TronShareQuery(ShareID, ReplyID, callback) {
   });  
   
   TronShareLike.allLike(ShareID, ReplyID).call(function(error,data1){
+    if(error)  console.error("like", error);
     console.log("data1",data1);
     ans_data.like = parseInt(data1._hex);
     checkFinish();
   });  
   
   TronShareReward.getSum(ShareID, ReplyID).call(function(error,data2){
+    if(error)  console.error("like", error);
     console.log("data2",data2);
     ans_data.reward = parseInt(data2._hex);
     checkFinish();
