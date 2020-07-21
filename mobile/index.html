@@ -86,9 +86,9 @@ function clickReply(ShareID) {
   cancel();
   var replyform = '<div class="weui-cells weui-cells_form"><div class="weui-cell" style="padding-left: 0px; padding-right: 0px;"><div class="weui-cell__bd" ><input name="tel" class="weui-input" id="Nickname"  placeholder="Nickname"></div></div><div class="weui-cell" style="padding-left: 0px; padding-right: 0px;"><div class="weui-cell__bd" ><input name="tel" class="weui-input" id="Content" placeholder="Content"></div></div><div class="weui-cell weui-cell_switch" style="padding-left: 0px; padding-right: 0px;"><div class="weui-cell__bd gray">Allow yourself to update</div><div class="weui-cell__ft"><label for="switchCP" class="weui-switch-cp"><input id="switchCP" class="weui-switch-cp__input" type="checkbox"><div class="weui-switch-cp__box"></div></label></div></div><div class="weui-cell weui-cell_select"><div class="weui-cell__bd"><select class="weui-select gray font13" id="Account" style="padding-left: 0px; padding-right: 0px;"><option value=null>No accounts found. Please connect to Ethereum.</option></select></div></div></div><div class="weui-form-preview__ft"><a class="weui-form-preview__btn blue" onclick="reply('+ShareID+')">Reply '+ShareID+'</a><a class="weui-form-preview__btn gray" onclick="cancel()">Cancel</a></div>';
   
-  getAccount();
 
   document.getElementById('ActionTo'+ShareID+'-0').innerHTML=replyform;
+  getAccount();
   openaction = [ShareID,0,"reply"];
 }
 
@@ -98,9 +98,9 @@ function clickLike(ShareID, ReplyID) {
   cancel();
   var likeform = '<div class="weui-cells weui-cells_form"></div><div class="weui-cell weui-cell_select"><div class="weui-cell__bd"><select class="weui-select gray font13" id="Account" style="padding-left: 0px; padding-right: 0px;"><option value=null>No accounts found. Please connect to Ethereum.</option></select></div></div></div><div class="weui-form-preview__ft"><a class="weui-form-preview__btn blue" onclick="like('+ShareID+','+ReplyID+')">Like '+ShareID+','+ReplyID+'</a><a class="weui-form-preview__btn gray" onclick="cancel()">Cancel</a></div>';
 
-  getAccount();
 
   document.getElementById('ActionTo'+ShareID+'-'+ReplyID).innerHTML=likeform;
+  getAccount();
   openaction = [ShareID,ReplyID,"like"];
 }
 
@@ -121,9 +121,9 @@ function clickReward(ShareID, ReplyID) {
   cancel();
   var rewardform = '<div class="weui-cells weui-cells_form"><div class="weui-cell" style="padding-left: 0px; padding-right: 0px;"><div class="weui-cell__bd" ><input name="tel" class="weui-input" id="Value" placeholder="Value(ETH)"></div></div><div class="weui-cell weui-cell_select"><div class="weui-cell__bd"><select class="weui-select gray font13" id="Account" style="padding-left: 0px; padding-right: 0px;"><option value=null>No accounts found. Please connect to Ethereum.</option></select></div></div></div><div class="weui-form-preview__ft"><a class="weui-form-preview__btn blue" onclick="reward('+ShareID+','+ReplyID+')">Reward '+ShareID+','+ReplyID+'</a><a class="weui-form-preview__btn gray" onclick="cancel()">Cancel</a></div>';
 
-  getAccount();
 
   document.getElementById('ActionTo'+ShareID+'-'+ReplyID).innerHTML=rewardform;
+  getAccount();
   openaction = [ShareID,ReplyID,"reward"];
 }
 
