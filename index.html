@@ -287,7 +287,7 @@ function like(ShareID, ReplyID) {
 function reward(ShareID, ReplyID) {
   var value = document.getElementById("Value").value;
   var account = document.getElementById("Account").value;
-  var towei = web3.utils.toWei(value, 'ether');
+  var towei = tronWeb.toSun(value, 'ether');
   console.log(towei);
   TronShareReward.methods.Reward(ShareID,ReplyID).send({value:towei,from:account}, function(error,data){
     //
@@ -325,7 +325,7 @@ function Share2html(ShareID, oneQuery) {
 
   str += '<div style="width:800px">';
   str +=  '<div style="display:inline;" >'+timestampToTime(oneQuery.timestamp)+'</div>';
-  str +=  '<div onclick="clickReward('+ShareID+','+0+')" class="action">Reward: '+web3.utils.fromWei(oneQuery.reward,"ether")+' ETH</div>';
+  str +=  '<div onclick="clickReward('+ShareID+','+0+')" class="action">Reward: '+tronWeb.fromSun(oneQuery.reward,"ether")+' ETH</div>';
   str +=  '<div onclick="clickLike('+ShareID+','+0+')" class="action">Like: '+oneQuery.like+'</div>';
   str +=  '<div onclick="clickReply('+ShareID+')" class="action">Reply</div>';
   if(oneQuery.AllowUpdated && accountBeforeLoading.indexOf(oneQuery.sender)>=0) {
