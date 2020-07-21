@@ -397,7 +397,7 @@ function startApp(){
 
   console.log("calling count");
   TronShare.count().call(function(error,data){
-      cnt = parseInt(data, 16);
+      cnt = parseInt(data._hex, 16);
       console.log(cnt);
       readShare(cnt-1,0,cnt);
     });
