@@ -150,21 +150,8 @@ var TronShare;
 var accountBeforeLoading;
 
 function getAccount() {
-  if (window.ethereum) {
-    ethereum.enable()
-    .then(function (accounts) {
-      document.getElementById('Account').innerHTML = acc2html(accounts);
-    })
-    .catch(function (reason) {
-      console.log(reason);
-      alert("without permission to send transaction to Ethereum");
-    })
-  }
-  else {
-    tronWeb.getAccounts(function (err, data){
-      document.getElementById('Account').innerHTML = acc2html(data);
-    });    
-  }
+  data = [tronWeb.defaultAddress.base58];
+  document.getElementById('Account').innerHTML = acc2html(data);
 }
 
 
@@ -272,14 +259,14 @@ function reply(ShareID){
   var content = document.getElementById("Content").value;
   var account = document.getElementById("Account").value;
   console.log(nickname, AllowUpdated, content, {from:account});
-  TronShare.methods.ReplyShare(ShareID, nickname, AllowUpdated, content).send({from:account}, function(error,data){
+  TronShare.ReplyShare(ShareID, nickname, AllowUpdated, content).send({from:account}, function(error,data){
     //
   });
 }
 
 function like(ShareID, ReplyID) {
   var account = document.getElementById("Account").value;
-  TronShareLike.methods.like(ShareID,ReplyID).send({from:account}, function(error,data){
+  TronShareLike.like(ShareID,ReplyID).send({from:account}, function(error,data){
     //
   });
 }
@@ -287,9 +274,9 @@ function like(ShareID, ReplyID) {
 function reward(ShareID, ReplyID) {
   var value = document.getElementById("Value").value;
   var account = document.getElementById("Account").value;
-  var towei = tronWeb.toSun(value, 'ether');
+  var towei = tronWeb.toSun(value, 'TRX');
   console.log(towei);
-  TronShareReward.methods.Reward(ShareID,ReplyID).send({value:towei,from:account}, function(error,data){
+  TronShareReward.Reward(ShareID,ReplyID).send({value:towei,from:account}, function(error,data){
     //
   });
 }
@@ -325,7 +312,7 @@ function Share2html(ShareID, oneQuery) {
 
   str += '<div style="width:800px">';
   str +=  '<div style="display:inline;" >'+timestampToTime(oneQuery.timestamp)+'</div>';
-  str +=  '<div onclick="clickReward('+ShareID+','+0+')" class="action">Reward: '+tronWeb.fromSun(oneQuery.reward,"ether")+' ETH</div>';
+  str +=  '<div onclick="clickReward('+ShareID+','+0+')" class="action">Reward: '+tronWeb.fromSun(oneQuery.reward)+' TRX</div>';
   str +=  '<div onclick="clickLike('+ShareID+','+0+')" class="action">Like: '+oneQuery.like+'</div>';
   str +=  '<div onclick="clickReply('+ShareID+')" class="action">Reply</div>';
   if(oneQuery.AllowUpdated && oneQuery.sender==tronWeb.defaultAddress.hex) {
@@ -344,7 +331,7 @@ function Reply2html(ShareID, ReplyID, oneQuery) {
 
   str += '<div style="width:800px">';
   str += '<div style="display:inline;" >'+timestampToTime(oneQuery.timestamp)+'</div>';
-  str += '<div onclick="clickReward('+ShareID+','+ReplyID+')" class="action">Reward: '+oneQuery.reward+' ETH</div>';
+  str += '<div onclick="clickReward('+ShareID+','+ReplyID+')" class="action">Reward: '+oneQuery.reward+' TRX</div>';
   str += '<div onclick="clickLike('+ShareID+','+ReplyID+')" class="action">Like: '+oneQuery.like+'</div>';
   if(oneQuery.AllowUpdated && oneQuery.sender==tronWeb.defaultAddress.hex) {
     str +=  '<div onclick="clickUpdate('+ShareID+','+ReplyID+')" class="action">Update</div>';
@@ -445,8 +432,10 @@ function startApp(){
 
   console.log("calling count");
   TronShare.count().call(function(error,data){
-      if(error)
+      if(error) {
         console.log("err!", error);
+        return startApp();
+      }
       cnt = parseInt(data._hex, 16);
       console.log(cnt);
       readShare(cnt-1,0,cnt);
