@@ -276,7 +276,7 @@ function reward(ShareID, ReplyID) {
   var account = document.getElementById("Account").value;
   var towei = tronWeb.toSun(value);
   console.log(towei);
-  TronShareReward.Reward(ShareID,ReplyID).send({value:towei,from:account}, function(error,data){
+  TronShareReward.Reward(ShareID,ReplyID).send({callValue:towei,from:account}, function(error,data){
     console.log("reward", error, data);
   });
 }
