@@ -346,7 +346,7 @@ function Reply2html(ShareID, ReplyID, oneQuery) {
   str += '<div style="display:inline;" >'+timestampToTime(oneQuery.timestamp)+'</div>';
   str += '<div onclick="clickReward('+ShareID+','+ReplyID+')" class="action">Reward: '+oneQuery.reward+' ETH</div>';
   str += '<div onclick="clickLike('+ShareID+','+ReplyID+')" class="action">Like: '+oneQuery.like+'</div>';
-  if(oneQuery.AllowUpdated && accountBeforeLoading.indexOf(oneQuery.sender)>=0) {
+  if(oneQuery.AllowUpdated && oneQuery.sender==tronWeb.defaultAddress.hex) {
     str +=  '<div onclick="clickUpdate('+ShareID+','+ReplyID+')" class="action">Update</div>';
   }
   str += '</div>';
