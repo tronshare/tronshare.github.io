@@ -406,6 +406,7 @@ function TronShareQuery(ShareID, ReplyID, callback) {
 function readShare(ShareID, ReplyID,  length) {
 
   TronShareQuery(ShareID,ReplyID, function(error,data){
+    console.log("callback", error, data);
     if (error) {
       console.log("no reply, next share");
       //no reply, next share
