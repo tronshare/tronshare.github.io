@@ -368,22 +368,25 @@ function TronShareQuery(ShareID, ReplyID, callback) {
       callback(ans_error, ans_data);
   }
 
-  TronShare.allShare(ShareID, ReplyID).call(function(error,data){
+  TronShare.allShare(ShareID, ReplyID).call(function(error,data0){
+    console.log(data0);
     if(error) {
       ans_error = error;
       return;
     }
-    ans_data.timestamp = data.timestamp;
+    ans_data.timestamp = data0.timestamp;
     checkFinish()
   });  
   
-  TronShareLike.allLike(ShareID, ReplyID).call(function(error,data){
-    ans_data.like = parseInt(data._hex);
+  TronShareLike.allLike(ShareID, ReplyID).call(function(error,data1){
+    console.log("data1",data1);
+    ans_data.like = parseInt(data1._hex);
     checkFinish();
   });  
   
-  TronShare.allShare(ShareID, ReplyID).call(function(error,data){
-    ans_data.reward = parseInt(data._hex);
+  TronShareReward.getSum(ShareID, ReplyID).call(function(error,data2){
+    console.log("data2",data2);
+    ans_data.reward = parseInt(data2._hex);
     checkFinish();
   });  
   
