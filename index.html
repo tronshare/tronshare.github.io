@@ -328,7 +328,7 @@ function Share2html(ShareID, oneQuery) {
   str +=  '<div onclick="clickReward('+ShareID+','+0+')" class="action">Reward: '+tronWeb.fromSun(oneQuery.reward,"ether")+' ETH</div>';
   str +=  '<div onclick="clickLike('+ShareID+','+0+')" class="action">Like: '+oneQuery.like+'</div>';
   str +=  '<div onclick="clickReply('+ShareID+')" class="action">Reply</div>';
-  if(oneQuery.AllowUpdated && accountBeforeLoading.indexOf(oneQuery.sender)>=0) {
+  if(oneQuery.AllowUpdated && oneQuery.sender==tronWeb.defaultAddress.hex) {
     str +=  '<div onclick="clickUpdate('+ShareID+','+0+')" class="action">Update</div>';
   }
   str += '</div>';
