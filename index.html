@@ -358,6 +358,7 @@ function Reply2html(ShareID, ReplyID, oneQuery) {
 }
 
 function TronShareQuery(ShareID, ReplyID, callback) {
+  console.log("TronShareQuery", ShareID, ReplyID);
   var ans_error;
   var ans_data = {};
   var getting = 3;
@@ -375,7 +376,13 @@ function TronShareQuery(ShareID, ReplyID, callback) {
       ans_error = error;
       return;
     }
-    ans_data.timestamp = data0.timestamp;
+    ans_data.AllowUpdated = data0.AllowUpdated;
+    ans_data.content = data0.content;
+    ans_data.nickname = data0.nickname;
+    ans_data.sender = data0.sender;
+    ans_data.timestamp = parseInt(data0.timestamp._hex);
+
+
     checkFinish()
   });  
   
