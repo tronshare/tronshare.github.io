@@ -108,7 +108,7 @@
 </html>
 
 <script>
-var EtherShare;
+var TronShare;
 
 function goto(url) {
     document.getElementById('loadingToast').innerHTML = '<div class="weui-mask_transparent"></div><div class="weui-toast"><i class="weui-loading weui-icon_toast"></i><p class="weui-toast__content">Loading</p></div>';
@@ -122,7 +122,7 @@ function submit(){
   var content = document.getElementById("Content").value;
   var account = document.getElementById("Account").value;
   console.log(nickname, AllowUpdated, content, {from:account});
-  EtherShare.methods.NewShare(nickname, AllowUpdated, content).send({from:account}, function(error,data){
+  TronShare.NewShare(nickname, AllowUpdated, content).send({}, function(error,data){
     if(err) alert(222);
     else
       console.log(111);
@@ -142,41 +142,21 @@ function acc2html(data) {
 }
 
 function getAccount() {
-  if (window.ethereum) {
-    ethereum.enable()
-    .then(function (accounts) {
-      document.getElementById('Account').innerHTML = acc2html(accounts);
-    })
-    .catch(function (reason) {
-      console.log(reason);
-      alert("without permission to send transaction to Ethereum");
-    })
-  }
-  else {
-    web3.eth.getAccounts(function (err, data){
-      document.getElementById('Account').innerHTML = acc2html(data);
-    });    
-  }
+  data = [tronWeb.defaultAddress.base58];
+  document.getElementById('Account').innerHTML = acc2html(data);
 }
 
 
+
 function startApp(){
-  EtherShare = new web3.eth.Contract([{"constant":true,"inputs":[],"name":"count","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"ShareID","type":"uint256"},{"name":"ReplyID","type":"uint256"},{"name":"content","type":"string"}],"name":"Update","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"ShareID","type":"uint256"},{"name":"nickname","type":"string"},{"name":"AllowUpdated","type":"bool"},{"name":"content","type":"string"}],"name":"ReplyShare","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"},{"name":"","type":"uint256"}],"name":"allShare","outputs":[{"name":"sender","type":"address"},{"name":"nickname","type":"string"},{"name":"timestamp","type":"uint256"},{"name":"AllowUpdated","type":"bool"},{"name":"content","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"link","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"nickname","type":"string"},{"name":"AllowUpdated","type":"bool"},{"name":"content","type":"string"}],"name":"NewShare","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"name":"ShareID","type":"uint256"},{"indexed":false,"name":"ReplyID","type":"uint256"}],"name":"EVENT","type":"event"}],"0xc86bdf9661c62646194ef29b1b8f5fe226e8c97e");
+  TronShare = tronWeb.contract([{"constant":true,"inputs":[],"name":"count","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"ShareID","type":"uint256"},{"name":"ReplyID","type":"uint256"},{"name":"content","type":"string"}],"name":"Update","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"ShareID","type":"uint256"},{"name":"nickname","type":"string"},{"name":"AllowUpdated","type":"bool"},{"name":"content","type":"string"}],"name":"ReplyShare","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"},{"name":"","type":"uint256"}],"name":"allShare","outputs":[{"name":"sender","type":"address"},{"name":"nickname","type":"string"},{"name":"timestamp","type":"uint256"},{"name":"AllowUpdated","type":"bool"},{"name":"content","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"link","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"nickname","type":"string"},{"name":"AllowUpdated","type":"bool"},{"name":"content","type":"string"}],"name":"NewShare","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"name":"ShareID","type":"uint256"},{"indexed":false,"name":"ReplyID","type":"uint256"}],"name":"EVENT","type":"event"}],"TEEygVmUUsr2cpnPZTuq8kqq7wvuBqJDya");
   getAccount();
 }
 
 
 window.addEventListener('load', function() {
   // Modern dapp browsers...
-  if (window.ethereum) {
-    window.web3 = new Web3(ethereum);
-    console.log("Modern");
-    startApp();
-  }
-  // Legacy dapp browsers...
-  else if (window.web3) {
-    window.web3 = new Web3(web3.currentProvider);
-    console.log("Legacy");
+  if (window.tronWeb) {
     startApp();
   }
   // Non-dapp browsers...

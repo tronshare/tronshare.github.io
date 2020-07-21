@@ -286,7 +286,7 @@ function update(ShareID, ReplyID){
   var content = document.getElementById("Content").value;
   var account = document.getElementById("Account").value;
   console.log(ShareID, ReplyID, content, {from:account});
-  TronShare.methods.Update(ShareID, ReplyID, content).send({}, function(error,data){
+  TronShare.Update(ShareID, ReplyID, content).send({}, function(error,data){
     //
   });
 }
