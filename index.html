@@ -266,7 +266,7 @@ function reply(ShareID){
 
 function like(ShareID, ReplyID) {
   var account = document.getElementById("Account").value;
-  TronShareLike.like(ShareID,ReplyID).send({from:account}, function(error,data){
+  TronShareLike.like(ShareID,ReplyID).send({}, function(error,data){
     //
   });
 }
@@ -274,9 +274,9 @@ function like(ShareID, ReplyID) {
 function reward(ShareID, ReplyID) {
   var value = document.getElementById("Value").value;
   var account = document.getElementById("Account").value;
-  var towei = tronWeb.toSun(value);
-  console.log(towei);
-  TronShareReward.Reward(ShareID,ReplyID).send({callValue:towei,from:account}, function(error,data){
+  var tosun = tronWeb.toSun(value);
+  console.log(tosun);
+  TronShareReward.Reward(ShareID,ReplyID).send({callValue:tosun}, function(error,data){
     console.log("reward", error, data);
   });
 }
@@ -285,7 +285,7 @@ function update(ShareID, ReplyID){
   var content = document.getElementById("Content").value;
   var account = document.getElementById("Account").value;
   console.log(ShareID, ReplyID, content, {from:account});
-  TronShare.methods.Update(ShareID, ReplyID, content).send({from:account}, function(error,data){
+  TronShare.methods.Update(ShareID, ReplyID, content).send({}, function(error,data){
     //
   });
 }
