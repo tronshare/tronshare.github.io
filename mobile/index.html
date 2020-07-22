@@ -369,6 +369,7 @@ window.addEventListener('load', function() {
     tronWeb = new TronWeb({
         fullHost: 'https://api.trongrid.io'
     });
+    tronWeb.setAddress(tronWeb.address.fromHex("410000000000000000000000000000000000000000"));
     startApp();
   }
 })
