@@ -360,16 +360,24 @@ function startApp(){
 
   TronShareReward = tronWeb.contract([{"constant":false,"inputs":[{"name":"ShareID","type":"uint256"},{"name":"ReplyID","type":"uint256"}],"name":"Reward","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"},{"name":"","type":"uint256"},{"name":"","type":"uint256"}],"name":"allRewards","outputs":[{"name":"from","type":"address"},{"name":"value","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"ShareID","type":"uint256"},{"name":"ReplyID","type":"uint256"}],"name":"getSum","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"}],"TToZYfsJK8FmN9ZkbafECGjBnD9hK1EDnG");
 
-  console.log("calling count");
-  TronShare.count().call(function(error,data){
-      if(error) {
-        console.log("err!", error);
-        return startApp();
-      }
-      cnt = parseInt(data._hex, 16);
-      console.log(cnt);
-      readShare(cnt-1,0,cnt);
-    });
+  var queryShareID = getQuery()["id"];
+  if(queryShareID) {
+    var ShareID = parseInt(queryShareID);
+    readShare(ShareID,0,0);
+  }
+  else {
+    console.log("calling count");
+    TronShare.count().call(function(error,data){
+        if(error) {
+          console.log("err!", error);
+          return startApp();
+        }
+        cnt = parseInt(data._hex, 16);
+        console.log(cnt);
+        readShare(cnt-1,0,cnt);
+      });
+
+  }
 }
 
 window.addEventListener('load', function() {
