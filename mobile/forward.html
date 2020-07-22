@@ -187,7 +187,7 @@ function TronShareQuery(ShareID, ReplyID, callback) {
     ans_data.AllowUpdated = data0.AllowUpdated;
     ans_data.content = data0.content;
     ans_data.nickname = data0.nickname;
-    ans_data.sender = data0.sender;
+    ans_data.sender = tronWeb.address.fromHex(data0.sender);
     ans_data.timestamp = parseInt(data0.timestamp._hex);
 
 
