@@ -148,10 +148,11 @@ function submit(){
   var account = document.getElementById("Account").value;
   console.log(nickname, AllowUpdated, content, {from:account});
   TronShare.NewShare(nickname, AllowUpdated, content).send({}, function(error,data){
-    if(err) alert(222);
+    if(error) alert(error);
     else {
       console.log(111);
-      alert("交易哈希："+data);
+      alert("TxHash："+data);
+      location.href("./index.html");
     }
   });
 }

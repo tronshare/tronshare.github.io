@@ -261,14 +261,24 @@ function reply(ShareID){
   var account = document.getElementById("Account").value;
   console.log(nickname, AllowUpdated, content, {from:account});
   TronShare.ReplyShare(ShareID, nickname, AllowUpdated, content).send({from:account}, function(error,data){
-    //
+    if(error) alert(error);
+    else {
+      console.log(111);
+      alert("TxHash："+data);
+      location.href("./index.html");
+    }
   });
 }
 
 function like(ShareID, ReplyID) {
   var account = document.getElementById("Account").value;
   TronShareLike.like(ShareID,ReplyID).send({}, function(error,data){
-    //
+    if(error) alert(error);
+    else {
+      console.log(111);
+      alert("TxHash："+data);
+      location.href("./index.html");
+    }
   });
 }
 
@@ -278,7 +288,12 @@ function reward(ShareID, ReplyID) {
   var tosun = tronWeb.toSun(value);
   console.log(tosun);
   TronShareReward.Reward(ShareID,ReplyID).send({callValue:tosun}, function(error,data){
-    console.log("reward", error, data);
+    if(error) alert(error);
+    else {
+      console.log(111);
+      alert("TxHash："+data);
+      location.href("./index.html");
+    }
   });
 }
 
@@ -287,7 +302,12 @@ function update(ShareID, ReplyID){
   var account = document.getElementById("Account").value;
   console.log(ShareID, ReplyID, content, {from:account});
   TronShare.Update(ShareID, ReplyID, content).send({}, function(error,data){
-    //
+    if(error) alert(error);
+    else {
+      console.log(111);
+      alert("TxHash："+data);
+      location.href("./index.html");
+    }
   });
 }
 
