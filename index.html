@@ -336,7 +336,7 @@ function Share2html(ShareID, oneQuery) {
   str +=  '<div onclick="clickReward('+ShareID+','+0+')" class="action">Reward: '+tronWeb.fromSun(oneQuery.reward)+' TRX</div>';
   str +=  '<div onclick="clickLike('+ShareID+','+0+')" class="action">Like: '+oneQuery.like+'</div>';
   str +=  '<div onclick="clickReply('+ShareID+')" class="action">Reply</div>';
-  if(oneQuery.AllowUpdated && oneQuery.sender==tronWeb.defaultAddress.hex) {
+  if(oneQuery.AllowUpdated && oneQuery.sender==tronWeb.defaultAddress.base58) {
     str +=  '<div onclick="clickUpdate('+ShareID+','+0+')" class="action">Update</div>';
   }
   str += '</div>';
@@ -354,7 +354,7 @@ function Reply2html(ShareID, ReplyID, oneQuery) {
   str += '<div style="display:inline;" >'+timestampToTime(oneQuery.timestamp)+'</div>';
   str += '<div onclick="clickReward('+ShareID+','+ReplyID+')" class="action">Reward: '+oneQuery.reward+' TRX</div>';
   str += '<div onclick="clickLike('+ShareID+','+ReplyID+')" class="action">Like: '+oneQuery.like+'</div>';
-  if(oneQuery.AllowUpdated && oneQuery.sender==tronWeb.defaultAddress.hex) {
+  if(oneQuery.AllowUpdated && oneQuery.sender==tronWeb.defaultAddress.base58) {
     str +=  '<div onclick="clickUpdate('+ShareID+','+ReplyID+')" class="action">Update</div>';
   }
   str += '</div>';
