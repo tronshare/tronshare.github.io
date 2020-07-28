@@ -452,20 +452,18 @@ function startApp(){
   TronShareReward = tronWeb.contract([{"constant":false,"inputs":[{"name":"ShareID","type":"uint256"},{"name":"ReplyID","type":"uint256"}],"name":"Reward","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"},{"name":"","type":"uint256"},{"name":"","type":"uint256"}],"name":"allRewards","outputs":[{"name":"from","type":"address"},{"name":"value","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"ShareID","type":"uint256"},{"name":"ReplyID","type":"uint256"}],"name":"getSum","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"}],"TToZYfsJK8FmN9ZkbafECGjBnD9hK1EDnG");
 
   console.log("calling count");
-  var gotit = false;
   
   function checkLink() {
-    if(!gotit)
       alert("Please connect to TronLink or others for TronWeb.");
   }
-  setTimeout(checkLink, 3000);
+  var clock = setTimeout(checkLink, 3000);
 
   TronShare.count().call(function(error,data){
       if(error) {
         console.log("err!", error);
         return startApp();
       }
-      gotit = true;
+      clearTimeout(clock);
       cnt = parseInt(data._hex, 16);
       console.log(cnt);
       readShare(cnt-1,0,cnt);
