@@ -30,7 +30,7 @@ After that, you can visit `localhost` to use TronShare (TronLink or other Tron D
 
 The contract addresses are TEEygVmUUsr2cpnPZTuq8kqq7wvuBqJDya, TXTG5cETDFVt1k4TgZa1eaEc6rM8NyhPZG,  TToZYfsJK8FmN9ZkbafECGjBnD9hK1EDnG, TK8i4yvyM1CBSoksYFFt6jN31VRUj64Ux1.
 
-You can find the state of it on [StateOfTheDApps](https://www.stateofthedapps.com/dapps/TronShare), [DAppReview](https://dapp.review/dapp/tbd/TronShare), [DApp.com](https://www.dapp.com/dapp/TronShare), [DAppTotal](https://dapptotal.com/detail/tbd/TronShare).
+You can find the state of it on [StateOfTheDApps](https://www.stateofthedapps.com/dapps/TronShare), [DApp.com](https://www.dapp.com/dapp/TronShare), [DAppRadar](https://dappradar.com/tron/social/tronshare).
 
 You can review the source code and trasactions through Tron explorer (e.g., Tronscan.io): 
 
